@@ -536,17 +536,10 @@ int open_socket(conn_t *c, int quiet) {
     spdlog::error("Failed to open a socket");
     return -1;
   }
-  struct timeval to;
-  to.tv_sec = 1;
-  to.tv_usec = 0;
-  int ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &to, sizeof(to));
+  int bufsize = 0x800000;
+  int ret = setsockopt(fd, SOL_SOCKET, SO_SNDBUF, &bufsize, 4);
   if (ret != 0) {
-    spdlog::error("Failed to set receive timeout");
-    goto err;
-  }
-  ret = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &to, sizeof(to));
-  if (ret != 0) {
-    spdlog::error("Failed to set send timeout");
+    spdlog::error("Failed to set send buffer size ({} bytes)", bufsize);
     goto err;
   }
 

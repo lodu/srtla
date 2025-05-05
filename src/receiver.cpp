@@ -642,10 +642,10 @@ int resolve_srt_addr(const char *host, const char *port) {
     return -1;
   }
 
-  struct timeval to = {.tv_sec = 1, .tv_usec = 0};
-  ret = setsockopt(tmp_sock, SOL_SOCKET, SO_RCVTIMEO, &to, sizeof(to));
+  int bufsize = 0x800000;
+  ret = setsockopt(tmp_sock, SOL_SOCKET, SO_SNDBUF, &bufsize, 4);
   if (ret != 0) {
-    spdlog::error("Failed to set a socket timeout");
+    spdlog::error("Failed to set a send buffer size ({} bytes)", bufsize);
     return -1;
   }
 
