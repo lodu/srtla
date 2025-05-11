@@ -776,6 +776,13 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
+  int bufsize = 0x800000;
+  ret = setsockopt(srtla_sock, SOL_SOCKET, SO_SNDBUF, &bufsize, 4);
+  if (ret != 0) {
+    spdlog::error("Failed to set a send buffer size ({} bytes)", bufsize);
+    return -1;
+  }
+
   struct sockaddr_in6 listen_addr = {};
   listen_addr.sin6_family = AF_INET6;
   listen_addr.sin6_addr = in6addr_any;
