@@ -1091,6 +1091,10 @@ int main(int argc, char **argv) {
       .help("Enable verbose logging")
       .default_value(false)
       .implicit_value(true);
+  args.add_argument("--debug")
+      .help("Enable debug logging")
+      .default_value(false)
+      .implicit_value(true);
 
   try {
     args.parse_args(argc, argv);

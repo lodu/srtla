@@ -25,8 +25,9 @@ srtla_rec is an SRT transport proxy with link aggregation. SRTLA is designed to 
 ## Assumptions and Prerequisites
 
 SRTLA assumes that:
-- Data is streamed from an SRT *sender* in *caller* mode to an SRT *receiver* in *listener* mode
-- To benefit from link aggregation, the *sender* should have 2 or more network links to the SRT listener (typically internet-connected modems)
+
+- Data is streamed from an SRT _sender_ in _caller_ mode to an SRT _receiver_ in _listener_ mode
+- To benefit from link aggregation, the _sender_ should have 2 or more network links to the SRT listener (typically internet-connected modems)
 - The sender needs to have source routing configured, as SRTLA uses `bind()` to map UDP sockets to specific connections
 
 ## Installation
@@ -57,6 +58,7 @@ srtla_rec runs as a proxy between SRTla clients and an SRT server:
 - `--srt_hostname HOST`: Hostname of the downstream SRT server (default: 127.0.0.1)
 - `--srt_port PORT`: Port of the downstream SRT server (default: 4001)
 - `--verbose`: Enable verbose logging (default: disabled)
+- `--debug`: Enable debug logging (default: disabled)
 
 ### Example
 
@@ -82,6 +84,7 @@ SRTLA implements a protocol for packet transmission over multiple network connec
 2. **Packet Tracking**: The code tracks received packets with sequence numbers and periodically sends SRTLA-ACK packets back to confirm receipt.
 
 3. **Two-phase Registration Process**:
+
    - Sender (conn 0): `SRTLA_REG1` (contains sender-generated random ID)
    - Receiver: `SRTLA_REG2` (contains full ID with receiver-generated values)
    - Sender (conn 0): `SRTLA_REG2` (with full ID)
@@ -89,6 +92,7 @@ SRTLA implements a protocol for packet transmission over multiple network connec
    - Additional connections follow a similar pattern
 
 4. **Error Handling**: The receiver can send error responses:
+
    - `SRTLA_REG_ERR`: Operation temporarily failed
    - `SRTLA_REG_NGP`: Invalid ID, group must be re-registered
 
@@ -152,6 +156,7 @@ Connection quality is assessed by measuring and analyzing:
 - **Packet Loss**: Higher loss rates lead to more error points
 
 The weight levels are:
+
 - 100% (WEIGHT_FULL): Optimal connection
 - 70% (WEIGHT_DEGRADED): Slightly impaired connection
 - 40% (WEIGHT_POOR): Severely impaired connection
